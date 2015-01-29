@@ -18,7 +18,20 @@ endif
 ##############################
 
 ifeq ($(PLATFORM),)
-	PLATFORM = macosx
+UNAME_S := $(shell sh -c 'uname -s 2>/dev/null')
+PLATFORM := unknown
+
+ifeq ($(UNAME_S),Linux)
+	PLATFORM := linux
+endif
+
+ifeq ($(UNAME_S),Darwin)
+	PLATFORM := mac
+endif
+
+ifneq (,$(findstring MINGW,$(UNAME_S)))
+	PLATFORM := windows
+endif
 endif
 
 #######################
@@ -28,7 +41,7 @@ endif
 TARGET_NAME = launchtime
 
 GENERIC_BUILD_DIR = build
-BUILD_DIR = $(GENERIC_BUILD_DIR)/$(TARGET_NAME)/$(CONFIG)
+BUILD_DIR = $(GENERIC_BUILD_DIR)/$(TARGET_NAME)/$(PLATFORM)/$(CONFIG)
 
 HEADER_DIR = src
 SOURCE_DIR = src
@@ -41,7 +54,7 @@ OBJECT_FILES = $(addprefix $(BUILD_DIR)/, $(SOURCE_FILES:%.cpp=%.o))
 # Compilation flags definition #
 ################################
 
-ifeq ($(PLATFORM),macosx)
+ifeq ($(PLATFORM),mac)
 	RTMIDI_CXXFLAGS += -D__MACOSX_CORE__
 else ifeq ($(PLATFORM),linux)
 	RTMIDI_CXXFLAGS += -D__LINUX_ALSA__
@@ -62,7 +75,7 @@ CXXFLAGS += $(RTMIDI_CXXFLAGS)
 # Linker flags definition #
 ###########################
 
-ifeq ($(PLATFORM),macosx)
+ifeq ($(PLATFORM),mac)
 	RTMIDI_LDFLAGS += -framework CoreMIDI -framework CoreFoundation -framework CoreAudio
 else ifeq ($(PLATFORM),linux)
 	RTMIDI_LDFLAGS += -lasound -lpthread
@@ -73,25 +86,22 @@ endif
 LDFLAGS += -lm
 LDFLAGS += $(RTMIDI_LDFLAGS)
 
-###########################
-# Information             #
-###########################
-
-$(info # Project Information)
-$(info #   Target       : $(TARGET_NAME))
-$(info #   Platform     : $(PLATFORM))
-$(info #   Configuration: $(CONFIG))
-$(info #   C++ compiler : $(CXX))
-$(info #   C++ Flags    : $(CXXFLAGS))
-$(info #   Linker Flags : $(LDFLAGS))
-
 #####################
 # Compilation rules #
 #####################
 
-.PHONY: clean
+.PHONY: build_info clean distclean help
 
-all: $(TARGET_NAME)
+all: build_info $(TARGET_NAME)
+
+build_info:
+	@echo '# Build Information'
+	@echo '#   Target       : $(TARGET_NAME)'
+	@echo '#   Platform     : $(PLATFORM)'
+	@echo '#   Config       : $(CONFIG)'
+	@echo '#   C++ compiler : $(CXX)'
+	@echo '#   C++ Flags    : $(CXXFLAGS)'
+	@echo '#   Linker Flags : $(LDFLAGS)'
 
 $(TARGET_NAME): $(OBJECT_FILES)
 	@echo 'linking $(notdir $@)'
@@ -113,5 +123,5 @@ distclean:
 help:
 	@echo '# Available options:'
 	@echo '#   CONFIG=[ debug | release ]'
-	@echo '#   PLATFORM=[ macosx | linux | windows ]'
+	@echo '#   PLATFORM=[ mac | linux | windows ]'
 
