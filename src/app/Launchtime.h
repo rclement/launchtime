@@ -6,6 +6,7 @@
 #include "LaunchpadSequencer.h"
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace launchtime
 {
@@ -14,9 +15,15 @@ class Launchtime
 {
     public:
 
-        Launchtime(const std::string& devicename,
-                   const std::string& virtualport);
+        Launchtime();
         virtual ~Launchtime();
+
+        std::vector< std::string > availableMidiDevices();
+
+        bool isConnected();
+        bool connect(const std::string& devicename,
+                     const std::string& virtualport);
+        bool disconnect();
 
     private:
 
@@ -26,6 +33,7 @@ class Launchtime
         HostInterface* mHost;
         LaunchpadInterface* mLaunchpad;
         std::unique_ptr<LaunchpadSequencer> mSequencer;
+        bool mConnected;
 };
 
 } /* namespace launchtime */

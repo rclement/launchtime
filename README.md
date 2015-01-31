@@ -6,11 +6,17 @@ MIDI-enabled host software (DAW).
 
 # Compilation
 
-`$ make CONFIG=[debug|release] PLATFORM=[macosx|linux|windows]`
+In order to compile **Launchtime**, the Qt4 library is required.
+After the Qt4 framework is installed, run the following commands:
+```
+$ qmake
+$ make
+```
 
 # Usage
 
-`$ ./launchtime`
+The **Launchtime** app provides a simple graphical user interface allowing to
+connect to a Novation Launchpad device and to specify a name for the virtual MIDI port.
 
 # Notes
 
