@@ -11,8 +11,10 @@ DESTDIR = .
 
 QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++ -Wall -Wshadow -O2
 QMAKE_LFLAGS += -lm
+LIBS += -stdlib=libc++
 
 macx {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
     QMAKE_CXXFLAGS += -D__MACOSX_CORE__
     QMAKE_LFLAGS += -framework CoreMIDI -framework CoreFoundation -framework CoreAudio
 }
