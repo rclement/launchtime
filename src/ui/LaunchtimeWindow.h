@@ -5,6 +5,7 @@
 #include <QtGui/QMainWindow>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QSpinBox>
 #include <QPushButton>
 #include <QFormLayout>
 #include <memory>
@@ -13,27 +14,28 @@ class LaunchtimeWindow : public QMainWindow
 {
     Q_OBJECT
 
-    public:
+public:
 
-        explicit LaunchtimeWindow(QWidget *parent = 0);
-        ~LaunchtimeWindow();
+    explicit LaunchtimeWindow(QWidget *parent = 0);
+    ~LaunchtimeWindow();
 
-    public slots:
+public slots:
 
-        void quit();
-        void connectButtonClicked();
+    void quit();
+    void connectButtonClicked();
 
-    private:
+private:
 
-        void fillMidiDevicesBox();
+    void fillMidiDevicesBox();
 
-        std::unique_ptr<launchtime::Launchtime> mLaunchtime;
+    std::unique_ptr<launchtime::Launchtime> mLaunchtime;
 
-        QComboBox *mMidiDevicesBox;
-        QLineEdit *mLaunchtimeNameLine;
-        QPushButton *mConnectButton;
-        QFormLayout *mLayout;
-        QWidget *mWindow;
+    QComboBox *mMidiDevicesBox;
+    QLineEdit *mLaunchtimeNameLine;
+    QSpinBox *mLaunchtimeChannel;
+    QPushButton *mConnectButton;
+    QFormLayout *mLayout;
+    QWidget *mWindow;
 };
 
 #endif /* __LAUNCHTIME_WINDOW__ */

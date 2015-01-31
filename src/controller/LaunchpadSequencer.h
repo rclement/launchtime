@@ -8,47 +8,50 @@ namespace launchtime
 
 class LaunchpadSequencer : public LaunchpadController
 {
-    public:
+public:
 
-        LaunchpadSequencer();
-        virtual ~LaunchpadSequencer();
+    LaunchpadSequencer();
+    virtual ~LaunchpadSequencer();
 
-    protected:
+    void setMidiChannel(const int channel);
 
-        virtual void updateGridLEDs();
-        virtual void updateBankLEDs();
-        virtual void updateControlsLEDs();
+protected:
 
-        virtual void eventPadPressed(const int x, const int y);
-        virtual void eventPadReleased(const int x, const int y);
-        virtual void eventBankPressed(const int id);
-        virtual void eventBankReleased(const int id);
-        virtual void eventControlPressed(const int id);
-        virtual void eventControlReleased(const int id);
-        virtual void eventMidiMessage(const MidiMessage& message);
+    virtual void updateGridLEDs();
+    virtual void updateBankLEDs();
+    virtual void updateControlsLEDs();
 
-        void updateCurrentBeat();
-        void sendMidiNotes();
-        void resetGrid();
+    virtual void eventPadPressed(const int x, const int y);
+    virtual void eventPadReleased(const int x, const int y);
+    virtual void eventBankPressed(const int id);
+    virtual void eventBankReleased(const int id);
+    virtual void eventControlPressed(const int id);
+    virtual void eventControlReleased(const int id);
+    virtual void eventMidiMessage(const MidiMessage& message);
 
-    private:
+    void updateCurrentBeat();
+    void sendMidiNotes();
+    void resetGrid();
 
-        LaunchpadSequencer(const LaunchpadSequencer&);
-        LaunchpadSequencer& operator=(const LaunchpadSequencer&);
+private:
 
-        bool m_Running;
-        int m_LinesCount;
-        int m_MidiClockCount;
-        int m_MidiClockCountBar;
-        int m_MidiClockSteps;
-        bool m_MidiClockNewStepsPending;
-        int m_MidiClockNewSteps;
-        int m_CurrPosX;
-        int m_CurrPosY;
-        int m_PrevPosX;
-        int m_PrevPosY;
-        int m_MidiNotes[8];
-        LaunchpadPadState::PushState m_Muted[8];
+    LaunchpadSequencer(const LaunchpadSequencer&);
+    LaunchpadSequencer& operator=(const LaunchpadSequencer&);
+
+    bool m_Running;
+    int m_LinesCount;
+    int m_MidiClockCount;
+    int m_MidiClockCountBar;
+    int m_MidiClockSteps;
+    bool m_MidiClockNewStepsPending;
+    int m_MidiClockNewSteps;
+    int m_MidiChannel;
+    int m_CurrPosX;
+    int m_CurrPosY;
+    int m_PrevPosX;
+    int m_PrevPosY;
+    int m_MidiNotes[8];
+    LaunchpadPadState::PushState m_Muted[8];
 };
 
 } /* namespace launchtime */

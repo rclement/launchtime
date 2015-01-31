@@ -13,27 +13,28 @@ namespace launchtime
 
 class Launchtime
 {
-    public:
+public:
 
-        Launchtime();
-        virtual ~Launchtime();
+    Launchtime();
+    virtual ~Launchtime();
 
-        std::vector< std::string > availableMidiDevices();
+    std::vector< std::string > availableMidiDevices();
 
-        bool isConnected();
-        bool connect(const std::string& devicename,
-                     const std::string& virtualport);
-        bool disconnect();
+    bool isConnected();
+    bool connect(const std::string& devicename,
+                 const std::string& virtualport,
+                 const int midichannel = 1);
+    bool disconnect();
 
-    private:
+private:
 
-        Launchtime(const Launchtime&);
-        Launchtime& operator=(const Launchtime&);
+    Launchtime(const Launchtime&);
+    Launchtime& operator=(const Launchtime&);
 
-        HostInterface* mHost;
-        LaunchpadInterface* mLaunchpad;
-        std::unique_ptr<LaunchpadSequencer> mSequencer;
-        bool mConnected;
+    HostInterface* mHost;
+    LaunchpadInterface* mLaunchpad;
+    std::unique_ptr<LaunchpadSequencer> mSequencer;
+    bool mConnected;
 };
 
 } /* namespace launchtime */

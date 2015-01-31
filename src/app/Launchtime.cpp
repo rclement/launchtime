@@ -27,8 +27,7 @@ std::vector< std::string > Launchtime::availableMidiDevices()
     std::vector< std::string > devices;
     MidiInput in;
 
-    for (unsigned int i = 0; i < in.numPorts(); i++)
-    {
+    for (unsigned int i = 0; i < in.numPorts(); i++) {
         devices.push_back(in.portName(i));
     }
 
@@ -41,7 +40,8 @@ bool Launchtime::isConnected()
 }
 
 bool Launchtime::connect(const std::string& devicename,
-                         const std::string& virtualport)
+                         const std::string& virtualport,
+                         const int midichannel)
 {
     bool launchpadConnected = mLaunchpad->connect(devicename);
     bool hostConnected = mHost->connect(virtualport);
@@ -51,6 +51,10 @@ bool Launchtime::connect(const std::string& devicename,
     mSequencer->enable();
 
     mConnected = launchpadConnected && hostConnected;
+
+    if (!mConnected) {
+        disconnect();
+    }
 
     return mConnected;
 }
