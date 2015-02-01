@@ -10,33 +10,56 @@ class LaunchpadSequencer : public LaunchpadController
 {
 public:
 
+    class PadState
+    {
+    public:
+
+        enum PushState {
+            Disabled = 0,
+            Enabled,
+            Disabling,
+            Enabling
+        };
+
+        PadState() :
+            pushState(Disabled),
+            color(LaunchpadInterface::ColorOff),
+            note(0x24),
+            velocity(127) {}
+
+        virtual ~PadState() {}
+
+        PushState pushState;
+        LaunchpadInterface::Color color;
+        int note;
+        int velocity;
+    };
+
     LaunchpadSequencer();
     virtual ~LaunchpadSequencer();
 
     void setMidiChannel(const int channel);
 
-protected:
+private:
 
-    virtual void updateGridLEDs();
-    virtual void updateBankLEDs();
-    virtual void updateControlsLEDs();
-
-    virtual void eventPadPressed(const int x, const int y);
-    virtual void eventPadReleased(const int x, const int y);
-    virtual void eventBankPressed(const int id);
-    virtual void eventBankReleased(const int id);
-    virtual void eventControlPressed(const int id);
-    virtual void eventControlReleased(const int id);
-    virtual void eventMidiMessage(const MidiMessage& message);
+    LaunchpadSequencer(const LaunchpadSequencer&);
+    LaunchpadSequencer& operator=(const LaunchpadSequencer&);
 
     void updateCurrentBeat();
     void sendMidiNotes();
     void resetGrid();
 
-private:
+    void updateGridLEDs();
+    void updateBankLEDs();
+    void updateControlsLEDs();
 
-    LaunchpadSequencer(const LaunchpadSequencer&);
-    LaunchpadSequencer& operator=(const LaunchpadSequencer&);
+    void eventPadPressed(const int x, const int y);
+    void eventPadReleased(const int x, const int y);
+    void eventBankPressed(const int id);
+    void eventBankReleased(const int id);
+    void eventControlPressed(const int id);
+    void eventControlReleased(const int id);
+    void eventMidiMessage(const MidiMessage& message);
 
     bool m_Running;
     int m_LinesCount;
@@ -51,7 +74,8 @@ private:
     int m_PrevPosX;
     int m_PrevPosY;
     int m_MidiNotes[8];
-    LaunchpadPadState::PushState m_Muted[8];
+    PadState::PushState m_Muted[8];
+    PadState mGrid[8][8];
 };
 
 } /* namespace launchtime */

@@ -20,7 +20,7 @@ LaunchpadSequencer::LaunchpadSequencer() :
     m_PrevPosY(0)
 {
     for (int i = 0; i < 8; i++) {
-        m_Muted[i] = LaunchpadPadState::Disabled;
+        m_Muted[i] = PadState::Disabled;
     }
 
     m_MidiNotes[0] = 0x24;
@@ -48,10 +48,12 @@ void LaunchpadSequencer::updateGridLEDs()
 {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (mGrid[i][j].pushState() != LaunchpadPadState::Disabled) {
+            if (mGrid[i][j].pushState != PadState::Disabled) {
                 turnOnPadLED(i, j, LaunchpadInterface::ColorFullAmber);
+                mGrid[i][j].color = LaunchpadInterface::ColorFullAmber;
             } else {
                 turnOffPadLED(i, j);
+                mGrid[i][j].color = LaunchpadInterface::ColorOff;
             }
         }
     }
@@ -59,8 +61,9 @@ void LaunchpadSequencer::updateGridLEDs()
     if (! m_Running) {
         for (int i = 0; i < 8; i += 8/m_LinesCount) {
             for (int j = 0; j < 8; j++) {
-                if (mGrid[j][i].pushState() == LaunchpadPadState::Disabled) {
+                if (mGrid[j][i].pushState == PadState::Disabled) {
                     turnOnPadLED(j, i, LaunchpadInterface::ColorFullRed);
+                    mGrid[j][i].color = LaunchpadInterface::ColorFullRed;
                 }
             }
         }
@@ -70,7 +73,7 @@ void LaunchpadSequencer::updateGridLEDs()
 void LaunchpadSequencer::updateBankLEDs()
 {
     for (int i = 0; i < 8; i++) {
-        if (m_Muted[i] == LaunchpadPadState::Disabled) {
+        if (m_Muted[i] == PadState::Disabled) {
             turnOnBankLED(i, LaunchpadInterface::ColorFullYellow);
         } else {
             turnOffBankLED(i);
@@ -109,41 +112,43 @@ void LaunchpadSequencer::updateControlsLEDs()
 
 void LaunchpadSequencer::eventPadPressed(const int x, const int y)
 {
-    if (mGrid[x][y].pushState() == LaunchpadPadState::Disabled) {
-        mGrid[x][y].setPushState(LaunchpadPadState::Enabling);
+    if (mGrid[x][y].pushState == PadState::Disabled) {
+        mGrid[x][y].pushState = PadState::Enabling;
         turnOnPadLED(x, y, LaunchpadInterface::ColorFullAmber);
-    } else if (mGrid[x][y].pushState() == LaunchpadPadState::Enabled) {
-        mGrid[x][y].setPushState(LaunchpadPadState::Disabling);
+        mGrid[x][y].color = LaunchpadInterface::ColorFullAmber;
+    } else if (mGrid[x][y].pushState == PadState::Enabled) {
+        mGrid[x][y].pushState = PadState::Disabling;
     }
 }
 
 void LaunchpadSequencer::eventPadReleased(const int x, const int y)
 {
-    if (mGrid[x][y].pushState() == LaunchpadPadState::Enabling) {
-        mGrid[x][y].setPushState(LaunchpadPadState::Enabled);
-    } else if (mGrid[x][y].pushState() == LaunchpadPadState::Disabling) {
-        mGrid[x][y].setPushState(LaunchpadPadState::Disabled);
+    if (mGrid[x][y].pushState == PadState::Enabling) {
+        mGrid[x][y].pushState = PadState::Enabled;
+    } else if (mGrid[x][y].pushState == PadState::Disabling) {
+        mGrid[x][y].pushState = PadState::Disabled;
         turnOffPadLED(x, y);
+        mGrid[x][y].color = LaunchpadInterface::ColorOff;
     }
 }
 
 void LaunchpadSequencer::eventBankPressed(const int id)
 {
-    if (m_Muted[id] == LaunchpadPadState::Disabled) {
-        m_Muted[id] = LaunchpadPadState::Enabling;
-    } else if (m_Muted[id] == LaunchpadPadState::Enabled) {
-        m_Muted[id] = LaunchpadPadState::Disabling;
+    if (m_Muted[id] == PadState::Disabled) {
+        m_Muted[id] = PadState::Enabling;
+    } else if (m_Muted[id] == PadState::Enabled) {
+        m_Muted[id] = PadState::Disabling;
         turnOnBankLED(id, LaunchpadInterface::ColorFullYellow);
     }
 }
 
 void LaunchpadSequencer::eventBankReleased(const int id)
 {
-    if (m_Muted[id] == LaunchpadPadState::Enabling) {
-        m_Muted[id] = LaunchpadPadState::Enabled;
+    if (m_Muted[id] == PadState::Enabling) {
+        m_Muted[id] = PadState::Enabled;
         turnOffBankLED(id);
-    } else if (m_Muted[id] == LaunchpadPadState::Disabling) {
-        m_Muted[id] = LaunchpadPadState::Disabled;
+    } else if (m_Muted[id] == PadState::Disabling) {
+        m_Muted[id] = PadState::Disabled;
     }
 }
 
@@ -231,12 +236,15 @@ void LaunchpadSequencer::eventMidiMessage(const MidiMessage& message)
 void LaunchpadSequencer::updateCurrentBeat()
 {
     turnOffPadLED(m_PrevPosX, m_PrevPosY);
+    mGrid[m_PrevPosX][m_PrevPosY].color = LaunchpadInterface::ColorOff;
 
-    if (mGrid[m_PrevPosX][m_PrevPosY].pushState() != LaunchpadPadState::Disabled) {
+    if (mGrid[m_PrevPosX][m_PrevPosY].pushState != PadState::Disabled) {
         turnOnPadLED(m_PrevPosX, m_PrevPosY, LaunchpadInterface::ColorFullAmber);
+        mGrid[m_PrevPosX][m_PrevPosY].color = LaunchpadInterface::ColorFullAmber;
     }
 
     turnOnPadLED(m_CurrPosX, m_CurrPosY, LaunchpadInterface::ColorFullRed);
+    mGrid[m_CurrPosX][m_CurrPosY].color = LaunchpadInterface::ColorFullRed;
 }
 
 void LaunchpadSequencer::sendMidiNotes()
@@ -251,10 +259,10 @@ void LaunchpadSequencer::sendMidiNotes()
     const int end_line = start_line + 8 / m_LinesCount;
 
     for (int i = start_line, m = 0; i < end_line; i++, m++) {
-        if (m_Muted[i] == LaunchpadPadState::Disabled) {
+        if (m_Muted[i] == PadState::Disabled) {
             msg[1] = m_MidiNotes[m];
 
-            if (mGrid[m_CurrPosX][i].pushState() == LaunchpadPadState::Disabled) {
+            if (mGrid[m_CurrPosX][i].pushState == PadState::Disabled) {
                 msg[0] = 0x80;
                 msg[2] = 0x00;
             } else {
@@ -271,7 +279,7 @@ void LaunchpadSequencer::resetGrid()
 {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            mGrid[i][j].setPushState(LaunchpadPadState::Disabled);
+            mGrid[i][j].pushState = PadState::Disabled;
         }
     }
 

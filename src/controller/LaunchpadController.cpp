@@ -34,9 +34,9 @@ std::string LaunchpadController::name() const
     return mName;
 }
 
-void LaunchpadController::enable(const bool launchpad, const bool midi_host)
+void LaunchpadController::enable()
 {
-    if (mLaunchpad && !mLaunchpadEnabled && launchpad) {
+    if (mLaunchpad && !mLaunchpadEnabled) {
         mLaunchpad->addListener(this);
         mLaunchpadEnabled = true;
         updateGridLEDs();
@@ -44,22 +44,22 @@ void LaunchpadController::enable(const bool launchpad, const bool midi_host)
         updateControlsLEDs();
     }
 
-    if (mMidiHost && !mMidiHostEnabled && midi_host) {
+    if (mMidiHost && !mMidiHostEnabled) {
         mMidiHost->addListener(this);
         mMidiHostEnabled = true;
     }
 }
 
-void LaunchpadController::disable(const bool launchpad, const bool midi_host)
+void LaunchpadController::disable()
 {
     turnOffAllLEDs();
 
-    if (mLaunchpad && mLaunchpadEnabled && launchpad) {
+    if (mLaunchpad && mLaunchpadEnabled) {
         mLaunchpadEnabled = false;
         mLaunchpad->removeListener(this);
     }
 
-    if (mMidiHost && mMidiHostEnabled && midi_host) {
+    if (mMidiHost && mMidiHostEnabled) {
         mMidiHostEnabled = false;
         mMidiHost->removeListener(this);
     }
@@ -101,7 +101,6 @@ void LaunchpadController::turnOnPadLED(const int x, const int y, const Launchpad
 {
     if (mLaunchpadEnabled) {
         mLaunchpad->turnOnPadLED(x, y, color);
-        mGrid[x][y].setColor(color);
     }
 }
 
@@ -109,7 +108,6 @@ void LaunchpadController::turnOffPadLED(const int x, const int y)
 {
     if (mLaunchpadEnabled) {
         mLaunchpad->turnOffPadLED(x, y);
-        mGrid[x][y].setColor(LaunchpadInterface::ColorOff);
     }
 }
 
