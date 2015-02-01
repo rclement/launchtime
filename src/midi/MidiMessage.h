@@ -9,26 +9,25 @@ namespace launchtime
 
 class MidiMessage
 {
-    public:
+public:
 
-        enum Type
-        {
-            Voice = 0x90,
-            SysEx = 0xF0,
-            CC = 0xB0,
-            Unknown = 0xFF
-        };
+    enum Type {
+        Voice = 0x90,
+        SysEx = 0xF0,
+        CC = 0xB0,
+        Unknown = 0xFF
+    };
 
-        MidiMessage(std::vector<unsigned char>& message);
-        virtual ~MidiMessage();
+    MidiMessage(std::vector<unsigned char>& message);
+    virtual ~MidiMessage();
 
-        MidiMessage::Type type() const;
-        std::vector<unsigned char> data() const;
+    MidiMessage::Type type() const;
+    std::vector<unsigned char> data() const;
 
-    protected:
+protected:
 
-        MidiMessage::Type mType;
-        std::vector<unsigned char> mData;
+    MidiMessage::Type mType;
+    std::vector<unsigned char> mData;
 };
 
 } /* namespace launchtime */

@@ -7,47 +7,45 @@ namespace launchtime
 
 class MidiInput::Private
 {
-    public:
+public:
 
-        Private(const std::string & name) :
-            mName(name),
-            mDevice(RtMidi::UNSPECIFIED, mName)
-        {
-            mDevice.setCallback(midiMessageCallback, this);
-        }
+    Private(const std::string & name) :
+        mName(name),
+        mDevice(RtMidi::UNSPECIFIED, mName)
+    {
+        mDevice.setCallback(midiMessageCallback, this);
+    }
 
-        ~Private()
-        {
-            mDevice.cancelCallback();
-        }
+    ~Private()
+    {
+        mDevice.cancelCallback();
+    }
 
-        static void midiMessageCallback(double timestamp,
-                                        std::vector<unsigned char>* message,
-                                        void* userdata)
-        {
-            MidiInput::Private* obj = reinterpret_cast<MidiInput::Private*>(userdata);
-            MidiMessage msg(*message);
+    static void midiMessageCallback(double timestamp,
+                                    std::vector<unsigned char>* message,
+                                    void* userdata)
+    {
+        MidiInput::Private* obj = reinterpret_cast<MidiInput::Private*>(userdata);
+        MidiMessage msg(*message);
 
-            if (obj)
-            {
-                for (std::list<MidiInput::Listener*>::iterator it = obj->mListener.begin();
-                     it != obj->mListener.end();
-                     it++)
-                {
-                    
-                    (*it)->midiMessage(timestamp, msg);
-                }
+        if (obj) {
+            for (std::list<MidiInput::Listener*>::iterator it = obj->mListener.begin();
+                 it != obj->mListener.end();
+                 it++) {
+
+                (*it)->midiMessage(timestamp, msg);
             }
         }
+    }
 
-        std::string mName;
-        RtMidiIn mDevice;
-        std::list<MidiInput::Listener*> mListener;
+    std::string mName;
+    RtMidiIn mDevice;
+    std::list<MidiInput::Listener*> mListener;
 
-    private:
+private:
 
-        Private(const Private&);
-        Private& operator=(const Private&);
+    Private(const Private&);
+    Private& operator=(const Private&);
 };
 
 /* ========================================================================= */

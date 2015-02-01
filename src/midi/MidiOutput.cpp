@@ -7,23 +7,23 @@ namespace launchtime
 
 class MidiOutput::Private
 {
-    public:
+public:
 
-        Private(const std::string & name) :
-            mName(name),
-            mDevice(RtMidi::UNSPECIFIED, mName)
-        {}
+    Private(const std::string & name) :
+        mName(name),
+        mDevice(RtMidi::UNSPECIFIED, mName)
+    {}
 
-        ~Private()
-        {}
+    ~Private()
+    {}
 
-        std::string mName;
-        RtMidiOut mDevice;
+    std::string mName;
+    RtMidiOut mDevice;
 
-    private:
+private:
 
-        Private(const Private&);
-        Private& operator=(const Private&);
+    Private(const Private&);
+    Private& operator=(const Private&);
 };
 
 /* ========================================================================= */
