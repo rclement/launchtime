@@ -28,7 +28,7 @@ LaunchtimeWindow::LaunchtimeWindow(QWidget *parent) :
     mLayout->addRow("Launchpad Device", mMidiDevicesBox);
     mLayout->addRow("Launchtime MIDI Name", mLaunchtimeNameLine);
     mLayout->addRow("Launchtime MIDI Channel", mLaunchtimeChannel);
-    mLayout->addRow(mConnectButton);
+    mLayout->addRow("", mConnectButton);
 
     mWindow = new QWidget();
     mWindow->setLayout(mLayout);
