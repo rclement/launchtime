@@ -9,6 +9,8 @@ OBJECTS_DIR = $${BUILD_DIR}/obj
 MOC_DIR = $${BUILD_DIR}/moc
 DESTDIR = .
 
+QMAKE_CC = clang
+QMAKE_CXX = clang++
 QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++ -Wall -Wshadow -O2
 QMAKE_LFLAGS += -lm
 LIBS += -stdlib=libc++
@@ -16,15 +18,15 @@ LIBS += -stdlib=libc++
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
     QMAKE_CXXFLAGS += -D__MACOSX_CORE__
-    QMAKE_LFLAGS += -framework CoreMIDI -framework CoreFoundation -framework CoreAudio
+    LIBS += -framework CoreMIDI -framework CoreFoundation -framework CoreAudio
 }
 unix:!macx {
     QMAKE_CXXFLAGS += -D__LINUX_ALSA__
-    QMAKE_LFLAGS += -lasound -lpthread
+    LIBS += -lasound -lpthread
 }
 win32 {
     QMAKE_CXXFLAGS += -D__WINDOWS_MM__
-    QMAKE_LFLAGS += -lwinmm
+    LIBS += -lwinmm
 }
 
 INCLUDEPATH += \
