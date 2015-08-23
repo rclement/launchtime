@@ -1,12 +1,16 @@
 language: cpp
 
+os:
+  - osx
+
 compiler:
   - clang
 
-install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y libqt4-dev
+before_install:
+  - brew update
+  - brew install qt
 
 script:
   - qmake
   - make
+  - macdeployqt Launchtime.app -dmg -no-plugins
