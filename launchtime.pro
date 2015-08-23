@@ -1,7 +1,7 @@
 CONFIG += qt silent
 QT += core gui
 
-TARGET = launchtime
+TARGET = Launchtime
 TEMPLATE = app
 
 BUILD_DIR = build
@@ -16,6 +16,7 @@ QMAKE_LFLAGS += -lm
 LIBS += -stdlib=libc++
 
 macx {
+    QMAKE_INFO_PLIST = launchtime.plist
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
     QMAKE_CXXFLAGS += -D__MACOSX_CORE__
     LIBS += -framework CoreMIDI -framework CoreFoundation -framework CoreAudio

@@ -13,6 +13,15 @@ $ qmake
 $ make
 ```
 
+# Deploying the application bundle (MacOSX only)
+
+In order to generate and deploy the application bundle for MacOSX, simply run
+the following command:
+```
+$ macdeployqt Launchtime.app -dmg -no-plugins
+```
+A `Launchtime.dmg` file will be generated, ready for distribution.
+
 # Usage
 
 The **Launchtime** app provides a simple graphical user interface allowing to
