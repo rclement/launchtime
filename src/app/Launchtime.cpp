@@ -27,7 +27,8 @@ std::vector< std::string > Launchtime::availableMidiDevices()
     std::vector< std::string > devices;
     MidiInput in;
 
-    for (unsigned int i = 0; i < in.numPorts(); i++) {
+    for (unsigned int i = 0; i < in.numPorts(); i++)
+    {
         devices.push_back(in.portName(i));
     }
 
@@ -52,7 +53,8 @@ bool Launchtime::connect(const std::string& devicename,
 
     mConnected = launchpadConnected && hostConnected;
 
-    if (!mConnected) {
+    if (!mConnected)
+    {
         disconnect();
     }
 

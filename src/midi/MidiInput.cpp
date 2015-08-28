@@ -28,10 +28,12 @@ public:
         MidiInput::Private* obj = reinterpret_cast<MidiInput::Private*>(userdata);
         MidiMessage msg(*message);
 
-        if (obj) {
+        if (obj)
+        {
             for (std::list<MidiInput::Listener*>::iterator it = obj->mListener.begin();
                  it != obj->mListener.end();
-                 it++) {
+                 it++)
+            {
 
                 (*it)->midiMessage(timestamp, msg);
             }

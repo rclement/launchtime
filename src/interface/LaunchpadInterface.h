@@ -8,8 +8,6 @@
 namespace launchtime
 {
 
-
-
 class LaunchpadInterface : public MidiInput::Listener
 {
 public:
@@ -30,7 +28,8 @@ public:
                                   const bool on) = 0;
     };
 
-    enum Color {
+    enum Color
+    {
         ColorOff = 0x0C,
 
         ColorDimRed = 0x0D,

@@ -49,19 +49,24 @@ void LaunchtimeWindow::quit()
 
 void LaunchtimeWindow::connectButtonClicked()
 {
-    if (mLaunchtime->isConnected()) {
-        if (mLaunchtime->disconnect()) {
+    if (mLaunchtime->isConnected())
+    {
+        if (mLaunchtime->disconnect())
+        {
             mMidiDevicesBox->setEnabled(true);
             mLaunchtimeNameLine->setEnabled(true);
             mLaunchtimeChannel->setEnabled(true);
             mConnectButton->setText("Connect");
         }
-    } else {
+    }
+    else
+    {
         std::string launchpadName = mMidiDevicesBox->currentText().toStdString();
         std::string launchtimeName = mLaunchtimeNameLine->text().toStdString();
         int launchtimeChannel = mLaunchtimeChannel->value();
 
-        if (mLaunchtime->connect(launchpadName, launchtimeName, launchtimeChannel)) {
+        if (mLaunchtime->connect(launchpadName, launchtimeName, launchtimeChannel))
+        {
             mMidiDevicesBox->setEnabled(false);
             mLaunchtimeNameLine->setEnabled(false);
             mLaunchtimeChannel->setEnabled(false);
@@ -74,7 +79,8 @@ void LaunchtimeWindow::fillMidiDevicesBox()
 {
     std::vector< std::string > midiDevices = mLaunchtime->availableMidiDevices();
 
-    for (unsigned int i = 0; i < midiDevices.size(); i++) {
+    for (unsigned int i = 0; i < midiDevices.size(); i++)
+    {
         QString midiname = QString::fromStdString(midiDevices[i]);
         mMidiDevicesBox->insertItem(i, midiname);
     }

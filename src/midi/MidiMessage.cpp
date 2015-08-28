@@ -7,11 +7,16 @@ MidiMessage::MidiMessage(std::vector<unsigned char>& message) :
     mType(Unknown),
     mData(message)
 {
-    if (message[0] == 0x90) {
+    if (message[0] == 0x90)
+    {
         mType = Voice;
-    } else if (message[0] == 0xF0) {
+    }
+    else if (message[0] == 0xF0)
+    {
         mType = SysEx;
-    } else if (message[0] == 0xB0) {
+    }
+    else if (message[0] == 0xB0)
+    {
         mType = CC;
     }
 }

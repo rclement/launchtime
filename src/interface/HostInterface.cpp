@@ -19,7 +19,8 @@ HostInterface::~HostInterface()
 
 bool HostInterface::connect(const std::string& hostname)
 {
-    if (mConnected) {
+    if (mConnected)
+    {
         disconnect();
     }
 
@@ -62,7 +63,8 @@ void HostInterface::midiMessage(double timestamp,
 {
     for (std::list<Listener*>::iterator it = mListeners.begin();
          it != mListeners.end();
-         it++) {
+         it++)
+    {
         (*it)->midiMessageReceived(this, message);
     }
 }

@@ -24,27 +24,33 @@ bool LaunchpadInterface::connect(const std::string& devicename)
     int input_port = -1;
     int output_port = -1;
 
-    if (mConnected) {
+    if (mConnected)
+    {
         disconnect();
     }
 
-    for (unsigned int i = 0; i < mInput.numPorts(); i++) {
-        if (mInput.portName(i).compare(devicename) == 0) {
+    for (unsigned int i = 0; i < mInput.numPorts(); i++)
+    {
+        if (mInput.portName(i).compare(devicename) == 0)
+        {
             std::cout << devicename << " found on input port " << i << std::endl;
             input_port = i;
             break;
         }
     }
 
-    for (unsigned int i = 0; i < mOutput.numPorts(); i++) {
-        if (mOutput.portName(i).compare(devicename) == 0) {
+    for (unsigned int i = 0; i < mOutput.numPorts(); i++)
+    {
+        if (mOutput.portName(i).compare(devicename) == 0)
+        {
             std::cout << devicename << " found on output port " << i << std::endl;
             output_port = i;
             break;
         }
     }
 
-    if (input_port >= 0 && output_port >= 0) {
+    if (input_port >= 0 && output_port >= 0)
+    {
         mInput.openPort(input_port, "Launchpad Input");
         mOutput.openPort(output_port, "Launchpad Output");
 
@@ -54,7 +60,9 @@ bool LaunchpadInterface::connect(const std::string& devicename)
         mDeviceName = devicename;
 
         std::cout << devicename << ": MIDI I/O connected" << std::endl;
-    } else {
+    }
+    else
+    {
         mConnected = false;
 
         std::cout << devicename << ": cannot connect MIDI I/O" << std::endl;
@@ -65,7 +73,8 @@ bool LaunchpadInterface::connect(const std::string& devicename)
 
 void LaunchpadInterface::disconnect()
 {
-    if (mConnected) {
+    if (mConnected)
+    {
         mInput.closePort();
         mOutput.closePort();
         mConnected = false;
@@ -110,7 +119,8 @@ void LaunchpadInterface::turnOffAllLEDs()
     mOutput.sendMessage(msg);
 }
 
-void LaunchpadInterface::turnOnPadLED(const int x, const int y, const LaunchpadInterface::Color color)
+void LaunchpadInterface::turnOnPadLED(const int x, const int y,
+                                      const LaunchpadInterface::Color color)
 {
     const char pad = y * 16 + x;
 
@@ -130,7 +140,8 @@ void LaunchpadInterface::turnOffPadLED(const int x, const int y)
     turnOnPadLED(x, y, LaunchpadInterface::ColorOff);
 }
 
-void LaunchpadInterface::turnOnBankLED(const int id, const LaunchpadInterface::Color color)
+void LaunchpadInterface::turnOnBankLED(const int id,
+                                       const LaunchpadInterface::Color color)
 {
     std::vector<unsigned char> data;
 
@@ -148,7 +159,8 @@ void LaunchpadInterface::turnOffBankLED(const int id)
     turnOnBankLED(id, LaunchpadInterface::ColorOff);
 }
 
-void LaunchpadInterface::turnOnControlLED(const int id, const LaunchpadInterface::Color color)
+void LaunchpadInterface::turnOnControlLED(const int id,
+        const LaunchpadInterface::Color color)
 {
     std::vector<unsigned char> data;
 
@@ -207,7 +219,9 @@ void LaunchpadInterface::displayMessage(const std::string & message)
     data.push_back(0x04);
 
     for (unsigned int i = 0; i < message.size(); i++)
+    {
         data.push_back(message[i]);
+    }
 
     data.push_back(0xF7);
 
@@ -241,7 +255,8 @@ void LaunchpadInterface::midiMessage(double timestamp,
 
     MidiMessage::Type type = message.type();
 
-    if (type == MidiMessage::Voice) {
+    if (type == MidiMessage::Voice)
+    {
         // std::cout << "    Voice"<< std::endl;
 
         const int pad = message.data().at(1);
@@ -249,20 +264,27 @@ void LaunchpadInterface::midiMessage(double timestamp,
         const int x = pad - (y * 16);
         const bool on = (((int) message.data().at(2)) == 0x7F);
 
-        if ((x / 8) == 1) {
+        if ((x / 8) == 1)
+        {
             for (std::list<Listener*>::iterator it = mListeners.begin();
                  it != mListeners.end();
-                 it++) {
+                 it++)
+            {
                 (*it)->bankEvent(this, y, on);
             }
-        } else {
+        }
+        else
+        {
             for (std::list<Listener*>::iterator it = mListeners.begin();
                  it != mListeners.end();
-                 it++) {
+                 it++)
+            {
                 (*it)->padEvent(this, x, y, on);
             }
         }
-    } else if (type == MidiMessage::CC) {
+    }
+    else if (type == MidiMessage::CC)
+    {
         // std::cout << "    CC"<< std::endl;
 
         const int id = message.data().at(1) - 0x68;
@@ -270,12 +292,17 @@ void LaunchpadInterface::midiMessage(double timestamp,
 
         for (std::list<Listener*>::iterator it = mListeners.begin();
              it != mListeners.end();
-             it++) {
+             it++)
+        {
             (*it)->controlEvent(this, id, on);
         }
-    } else if (type == MidiMessage::SysEx) {
+    }
+    else if (type == MidiMessage::SysEx)
+    {
         // std::cout << "    SysEx"<< std::endl;
-    } else {
+    }
+    else
+    {
         // std::cout << "    Unknown"<< std::endl;
     }
 }

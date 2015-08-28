@@ -11,7 +11,8 @@ class MidiMessage
 {
 public:
 
-    enum Type {
+    enum Type
+    {
         Voice = 0x90,
         SysEx = 0xF0,
         CC = 0xB0,
