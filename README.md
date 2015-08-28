@@ -4,6 +4,20 @@
 hardware to be used as standalone a step-sequencer synchronized with any
 MIDI-enabled host software (DAW).
 
+# Usage
+
+The **Launchtime** app provides a simple graphical user interface allowing to
+connect to a Novation Launchpad device and to specify a name and a channel number
+for the virtual MIDI port:
+
+![launchtime-ui](launchtime_ui.png "Launchtime UI")
+
+# Notes
+
+Launchtime uses the RtMidi library to perform MIDI I/O operations, and most
+notably opening virtual MIDI ports to communication with MIDI hosts.
+For now, only the MacOSX and Linux platforms support this feature.
+
 # Compilation
 
 In order to compile **Launchtime**, the Qt4 library is required.
@@ -21,17 +35,6 @@ the following command:
 $ macdeployqt Launchtime.app -dmg -no-plugins
 ```
 A `Launchtime.dmg` file will be generated, ready for distribution.
-
-# Usage
-
-The **Launchtime** app provides a simple graphical user interface allowing to
-connect to a Novation Launchpad device and to specify a name for the virtual MIDI port.
-
-# Notes
-
-Launchtime uses the RtMidi library to perform MIDI I/O operations, and most
-notably opening virtual MIDI ports to communication with MIDI hosts.
-For now, only the MacOSX and Linux platforms support this feature.
 
 # Contact
 
