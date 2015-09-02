@@ -6,6 +6,10 @@ os:
 compiler:
   - clang
 
+before_install:
+  - brew update
+  - brew install qt
+
 before_script:
   - mkdir -p build
   - cd build
