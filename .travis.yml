@@ -6,11 +6,10 @@ os:
 compiler:
   - clang
 
-before_install:
-  - brew update
-  - brew install qt
+before_script:
+  - mkdir -p build
+  - cd build
+  - cmake ..
 
 script:
-  - qmake
   - make
-  - macdeployqt Launchtime.app -dmg -no-plugins
