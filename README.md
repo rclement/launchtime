@@ -1,5 +1,7 @@
 # Description
 
+[![Build Status](https://travis-ci.org/rclement/launchtime.svg?branch=develop)](https://travis-ci.org/rclement/launchtime)
+
 **Launchtime** is a multi-platform application allowing the Novation Launchpad
 hardware to be used as standalone a step-sequencer synchronized with any
 MIDI-enabled host software (DAW).
