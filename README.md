@@ -16,16 +16,19 @@ for the virtual MIDI port:
 
 # Notes
 
-Launchtime uses the RtMidi library to perform MIDI I/O operations, and most
-notably opening virtual MIDI ports to communication with MIDI hosts.
+**Launchtime** uses the RtMidi library to perform MIDI I/O operations, and most
+notably opening virtual MIDI ports to communication with other MIDI software.
 For now, only the MacOSX and Linux platforms support this feature.
 
 # Compilation
 
-In order to compile **Launchtime**, the Qt4 library is required.
-After the Qt4 framework is installed, run the following commands:
+In order to compile **Launchtime**, the Qt4 library is required and the CMake
+build system needs to be installed.
+After everything is properly is installed, run the following commands:
 ```
-$ qmake
+$ mkdir -p build
+$ cd build
+$ cmake ..
 $ make
 ```
 
